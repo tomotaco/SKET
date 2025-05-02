@@ -359,10 +359,8 @@ def insert_root_bone(armature_name: str):
     arm = bpy.data.armatures[arm_obj.data.name]
     c_root = [bone for bone in arm.bones if bone.parent is None]
 
-    if len(c_root) != 1:
+    if len(c_root) == 1:
         return
-    
-    c_root = c_root[0]
 
     ebs = arm.edit_bones
 
@@ -370,7 +368,8 @@ def insert_root_bone(armature_name: str):
     eb.head = (0, 0, 0)
     eb.tail = (0, 1, 0)
 
-    ebs[c_root.name].parent = eb
+    for c_root_elem in c_root:
+        ebs[c_root_elem.name].parent = eb
 
     bpy.ops.object.mode_set(mode="OBJECT", toggle=False)
 
