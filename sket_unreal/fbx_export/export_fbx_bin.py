@@ -3144,7 +3144,7 @@ def fbx_header_elements(root, scene_data, time=None):
     app_name = "Blender (stable FBX IO)"
     app_ver = bpy.app.version_string
 
-    from . import bl_info
+    from sket_unreal import bl_info
     addon_ver = bl_info["version"]
     del bl_info
 
