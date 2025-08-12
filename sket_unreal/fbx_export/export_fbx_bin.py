@@ -2541,6 +2541,22 @@ def fbx_animations(scene_data):
             path_resolve = ob.path_resolve
 
             for act in bpy.data.actions:
+
+                # HACK: === Export Action filter
+
+                from ..sket_common import (
+                    SKET_TAG_EXPORT
+                )
+
+                
+                if SKET_TAG_EXPORT not in act.keys():
+                    continue
+                
+                if act[SKET_TAG_EXPORT] == False:
+                    continue
+
+                # HACK: === END Export Action Filter
+
                 # For now, *all* paths in the action must be valid for the object, to validate the action.
                 # Unless that action was already assigned to the object!
                 if act != org_act and not validate_actions(act, path_resolve):
@@ -3140,9 +3156,11 @@ def fbx_header_elements(root, scene_data, time=None):
     app_name = "Blender (stable FBX IO)"
     app_ver = bpy.app.version_string
 
-    from . import bl_info
+    from sket_unreal import bl_info
     addon_ver = bl_info["version"]
     del bl_info
+
+    origin_addon_var = (5, 13, 0) # from OFFICIAL FBX Exporter blender4.5
 
     # ##### Start of FBXHeaderExtension element.
     header_ext = elem_empty(root, b"FBXHeaderExtension")
@@ -3166,8 +3184,8 @@ def fbx_header_elements(root, scene_data, time=None):
     elem_data_single_int32(elem, b"Second", time.second)
     elem_data_single_int32(elem, b"Millisecond", time.microsecond // 1000)
 
-    elem_data_single_string_unicode(header_ext, b"Creator", "%s - %s - %d.%d.%d"
-                                                % (app_name, app_ver, addon_ver[0], addon_ver[1], addon_ver[2]))
+    elem_data_single_string_unicode(header_ext, b"Creator", "%s - %s - SKET: %d.%d.%d (FBX origin: %d.%d.%d)"
+                                                % (app_name, app_ver, addon_ver[0], addon_ver[1], addon_ver[2], origin_addon_var[0], origin_addon_var[1], origin_addon_var[2]))
 
     # 'SceneInfo' seems mandatory to get a valid FBX file...
     # TODO use real values!
