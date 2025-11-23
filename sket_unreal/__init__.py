@@ -2,7 +2,7 @@ bl_info = {
     "name": "SKET: SkeletalMesh Export Tool for Unreal Engine",
     "author": "T_Sumisaki",
     "version": (1, 3, 0),
-    "blender": (3, 2, 0),
+    "blender": (5, 0, 0),
     "location": "File > Import-Export",
     "description": "FBX Exporter for Unreal Engine",
     "category": "Import-Export",
